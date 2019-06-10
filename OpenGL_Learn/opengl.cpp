@@ -310,6 +310,7 @@ int main(int argc,char *argv[]){
 		//int vertexColorLocation = glGetUniformLocation(shaderProgram,"ourColor");//从着色程序中取uniform的位置
 		//glUniform4f(vertexColorLocation,0.0f,greenValue,0.0f,1.0f);
 
+
 		//glBindVertexArray(VAO);
 		//glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
 
