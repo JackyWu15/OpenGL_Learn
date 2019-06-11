@@ -7,6 +7,9 @@
 #include <iostream>
 #include "Shader.h"
 #include "stb_image.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 using namespace std;
 
@@ -155,7 +158,7 @@ int main(int argc,char *argv[]){
 	//glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 	//std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
 
-	Shader ourShader("shader.vs", "shader.fs");
+	Shader ourShader("transform.vs", "shader.fs");
 
 
 	////三角形顶点数据
@@ -221,7 +224,8 @@ int main(int argc,char *argv[]){
 		第三个参数指定数据的类型，这里是GL_FLOAT(GLSL中vec*都是由浮点数值组成的)。
 		下个参数定义我们是否希望数据被标准化(Normalize)。如果我们设置为GL_TRUE，所有数据都会被映射到0（对于有符号型signed数据是 - 1）到1之间。我们把它设置为GL_FALSE。
 		第五个参数叫做步长(Stride)，它告诉我们在连续的顶点属性组之间的间隔。由于下个组位置数据在3个float之后，我们把步长设置为3 * sizeof(float)。要注意的是由于我们知道这个数组是紧密排列的（在两个顶点属性之间没有空隙）我们也可以设置为0来让OpenGL决定具体步长是多少（只有当数值是紧密排列时才可用）。一旦我们有更多的顶点属性，我们就必须更小心地定义每个顶点属性之间的间隔，我们在后面会看到更多的例子（译注: 这个参数的意思简单说就是从这个属性第二次出现的地方到整个数组0位置之间有多少字节）。
-		最后一个参数的类型是void*，所以需要我们进行这个奇怪的强制类型转换。它表示位置数据在缓冲中起始位置的偏移量(Offset)。由于位置数据在数组的开头，所以这里是0。我们会在后面详细解释这个参数。*/
+		最后一个参数的类型是void*，所以需要我们进行这个奇怪的强制类型转换。它表示位置数据在缓冲中起始位置的偏移量(Offset)。由于位置数据在数组的开头，所以这里是0。我
+		们会在后面详细解释这个参数。*/
 
 	//glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);//让opengl顶点着色器指向数据内存区域
 	//glEnableVertexAttribArray(0);//顶点属性默认关闭，这里启用
@@ -299,7 +303,19 @@ int main(int argc,char *argv[]){
 		//glUseProgram(shaderProgram);//运行程序，GPU的着色和渲染都会自动使用我们创建的程序了
 		//ourShader.use();
 
-		glBindVertexArray(VAO);//程序只用到一个数组，所以每次都会取同一个，如果要多个，可以切换绑定的数组
+		
+
+		glm::mat4 transform = glm::mat4(1.0f);//0.9.9.x以后glm矩阵默认为0矩阵，本版本为0.9.9.6，初始化为单位矩阵
+		transform = glm::translate(transform, glm::vec3(0.0f,0.0f,0.0f));//平移
+		transform = glm::rotate(transform,(float)glfwGetTime(),glm::vec3(0.0f,1.0f,0.0f));//旋转
+
+		ourShader.use();
+
+		unsigned int transformLoc = glGetUniformLocation(ourShader.ID,"transform");
+		glUniformMatrix4fv(transformLoc,1,GL_FALSE,glm::value_ptr(transform));//赋值给uniform和顶点坐标相乘
+
+
+		glBindVertexArray(VAO);//程序只用到一个数组，所以每次都会取同一个，如果要多个，可以切换绑定的数组,这里按规范也添加上
 
 		//glDrawArrays(GL_TRIANGLES,0,3);
 		glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);//使用索引绘制

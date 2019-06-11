@@ -46,6 +46,9 @@
     <None Include="shader.fs">
       <Filter>源文件</Filter>
     </None>
+    <None Include="transform.vs">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png">
