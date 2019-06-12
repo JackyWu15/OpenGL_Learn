@@ -6,6 +6,10 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+
+
 
 using namespace std;
 class  Shader {
@@ -21,6 +25,7 @@ public:
 	void setBool(const std::string &name, bool value)const;
 	void setInt(const std::string &name, int value) const;
 	void setFloat(const std::string &name, float value) const;
+	void setMat4(const std::string &name, const glm::mat4 &mat) const;
 };
 
  Shader:: Shader(const char *vertexPath, const char *fragmentPath) {
@@ -98,6 +103,11 @@ public:
  void Shader::setFloat(const std::string &name, float value) const {
 	 glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
  }
+
+ inline void Shader::setMat4(const std::string & name, const glm::mat4 & mat) const {
+	 glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+ }
+
 
  inline void Shader::checkCompileErrors(unsigned int shader, std::string type) {
 	 int success;

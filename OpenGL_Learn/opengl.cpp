@@ -13,6 +13,9 @@
 
 using namespace std;
 
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
 ////顶点着色器执行代码
 //const char *vertexShaderSource = "#version 450 core\n"//指定opengl的版本，这里采用了4.5核心代码
 //"layout (location = 0) in vec3 aPos;\n"//layout：连接到顶点数据 (location = 0):设定了输入变量的位置 in:声明所有的输入顶点属性 vec3：表示了空间上一个点以3维向量表示 apos:变量名
@@ -83,7 +86,7 @@ int main(int argc,char *argv[]){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);//只使用opengl核心代码库
 
 	//创建窗体
-	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -158,8 +161,10 @@ int main(int argc,char *argv[]){
 	//glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 	//std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
 
-	Shader ourShader("transform.vs", "shader.fs");
 
+	//Shader ourShader("shader.vs", "shader.fs");
+	//Shader ourShader("transform.vs", "shader.fs");
+	Shader ourShader("coordinate.vs", "coordinate.fs");
 
 	////三角形顶点数据
 	//float vertices[] = {
@@ -167,21 +172,6 @@ int main(int argc,char *argv[]){
 	// 0.5f, -0.5f, 0.0f,
 	// 0.0f,  0.5f, 0.0f
 	//};
-
-	//方形顶点数据
-	float vertices[] = {		
-			//顶点坐标		//颜色			// 纹理坐标
-		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,1.0f, // top right
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,0.0f,// bottom right
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,0.0f, // bottom left
-		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,1.0f  // top left 
-	};
-
-	//索引数据
-	unsigned int indices[] = {
-		0,1,3,
-		1,2,3
-	};
 
 	////增加颜色数据
 	//float vertices[] = {
@@ -191,6 +181,93 @@ int main(int argc,char *argv[]){
 	//	 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // 顶部
 	//};
 
+	////方形顶点数据
+	//float vertices[] = {
+	//	// positions  -        // texture coords
+	//	 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // top right
+	//	 0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // bottom right
+	//	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
+	//	-0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // top left 
+	//};				   
+
+
+	////方形带颜色顶点数据
+	//float vertices[] = {		
+	//		//顶点坐标		//颜色			// 纹理坐标
+	//	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,1.0f, // top right
+	//	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,0.0f,// bottom right
+	//	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,0.0f, // bottom left
+	//	-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,1.0f  // top left 
+	//};
+
+
+	////索引数据
+	//unsigned int indices[] = {
+	//	0,1,3,
+	//	1,2,3
+	//};
+
+
+	//立方体顶点数据
+	float vertices[] = {
+	   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	   -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	   -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	   -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+
+	//平移向量数组
+	glm::vec3 cubePositions[] = {
+	   glm::vec3(0.0f,  0.0f,  0.0f),
+	   glm::vec3(2.0f,  5.0f, -15.0f),
+	   glm::vec3(-1.5f, -2.2f, -2.5f),
+	   glm::vec3(-3.8f, -2.0f, -12.3f),
+	   glm::vec3(2.4f, -0.4f, -3.5f),
+	   glm::vec3(-1.7f,  3.0f, -7.5f),
+	   glm::vec3(1.3f, -2.0f, -2.5f),
+	   glm::vec3(1.5f,  2.0f, -2.5f),
+	   glm::vec3(1.5f,  0.2f, -1.5f),
+	   glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+	
+
 
 	//新建缓冲对象，用于管理顶点缓冲区，可以一次性将大量的顶点数据存储到GPU内存（显存）中
 	//VBO:顶点缓冲区对象
@@ -199,7 +276,7 @@ int main(int argc,char *argv[]){
 	unsigned int VBO,VAO,EBO;
 	glGenVertexArrays(1,&VAO);
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1,&EBO);
+	//glGenBuffers(1,&EBO);
 
 	//绑定数组
 	glBindVertexArray(VAO);
@@ -213,8 +290,8 @@ int main(int argc,char *argv[]){
 
 
 	//将索引对象绑定到缓冲区中
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),indices,GL_STATIC_DRAW);
+	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
 
 	
 
@@ -230,14 +307,14 @@ int main(int argc,char *argv[]){
 	//glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);//让opengl顶点着色器指向数据内存区域
 	//glEnableVertexAttribArray(0);//顶点属性默认关闭，这里启用
 
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8*sizeof(float),(void*)0);
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
+	glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,8*sizeof(float),(void*)(6*sizeof(float)));
-	glEnableVertexAttribArray(2);
+	/*glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);*/
 
 
 
@@ -283,16 +360,19 @@ int main(int argc,char *argv[]){
 
 	ourShader.use();//设置uiform前要运行程序
 
-	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);//0：为采样器分配纹理单元，数字越小越靠上，即指定了采样器处理这个单元
-
+	//glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);//0：为采样器分配纹理单元，数字越小越靠上，即指定了采样器处理这个单元
+	ourShader.setInt("texture1", 0);
 	ourShader.setInt("texture2", 1);
+
+
+	glEnable(GL_DEPTH_TEST);//开启z缓冲，如果当前片段在其他片段之后，会被丢弃掉，避免绘制效果重叠
 
 	//循环渲染窗体
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);//设置颜色缓冲和z缓冲
 
 
 		glActiveTexture(GL_TEXTURE0);//激活纹理单元
@@ -304,21 +384,80 @@ int main(int argc,char *argv[]){
 		//ourShader.use();
 
 		
+		//----------------------------------------平移后旋转-------------------------------------------------------//
+		//glm::mat4 transform = glm::mat4(1.0f);//0.9.9.x以后glm矩阵默认为0矩阵，本版本为0.9.9.6，初始化为单位矩阵
+		//transform = glm::translate(transform, glm::vec3(0.0f,0.0f,0.0f));//平移
+		//transform = glm::rotate(transform,(float)glfwGetTime(),glm::vec3(0.0f,1.0f,0.0f));//旋转
 
-		glm::mat4 transform = glm::mat4(1.0f);//0.9.9.x以后glm矩阵默认为0矩阵，本版本为0.9.9.6，初始化为单位矩阵
-		transform = glm::translate(transform, glm::vec3(0.0f,0.0f,0.0f));//平移
-		transform = glm::rotate(transform,(float)glfwGetTime(),glm::vec3(0.0f,1.0f,0.0f));//旋转
+		//ourShader.use();
+
+		//unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));//赋值给uniform和顶点坐标相乘
+
+		//----------------------------------------平移后旋转-------------------------------------------------------//
+
+
+
+
+		//////----------------------------------------模型视图透视矩阵变换-------------------------------------------------------//
+		//glm::mat4 model = glm::mat4(1.0f);//模型操作矩阵
+		//glm::mat4 view = glm::mat4(1.0f);//视图操作矩阵（世界坐标）
+		//glm::mat4 projection = glm::mat4(1.0f);//透视操作矩阵
+
+		////model = glm::rotate(model,glm::radians(-55.0f),glm::vec3(1.0f,0.0f,0.0f));//glm::radians(-55.0f):将旋转角度转为弧度，正为顺时针负为逆时针（沿着坐标方向）
+		//model = glm::rotate(model,(float)glfwGetTime(),glm::vec3(0.5,1.0f,0.0f));
+		//view = glm::translate(view, glm::vec3(0.0f,0.0f,-3.0f));//物体往后放
+		////视野角度，视口宽高比，近和远平面（此处是摄像机向屏幕延伸的方向为正，默认在0位置，即和屏幕0坐标重合，上面物体向后放置了3，如果近平面设置为3，那么视野坐标又重新和物体坐标重叠）
+		//projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+
+		//ourShader.use();
+
+		//unsigned int modelLoc =	glGetUniformLocation(ourShader.ID,"model");
+		//unsigned int viewLoc = glGetUniformLocation(ourShader.ID,"view");
+		//
+		//glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
+		//glUniformMatrix4fv(viewLoc,1,GL_FALSE,&view[0][0]);
+		//ourShader.setMat4("projection",projection);
+
+		//////----------------------------------------模型视图透视矩阵变换-------------------------------------------------------//
+
+
+
+		//----------------------------------------多个箱体-------------------------------------------------------//
+		
+		//视图和透视不改变，先初始化
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		ourShader.use();
+		ourShader.setMat4("view", view);
+		ourShader.setMat4("projection", projection);
 
-		unsigned int transformLoc = glGetUniformLocation(ourShader.ID,"transform");
-		glUniformMatrix4fv(transformLoc,1,GL_FALSE,glm::value_ptr(transform));//赋值给uniform和顶点坐标相乘
+		glBindVertexArray(VAO);
+
+		//渲染十个箱子
+		unsigned int i = 0;
+		for (i = 0; i < 10; i++) {
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f*i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			ourShader.setMat4("model", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
+		//----------------------------------------多个箱体-------------------------------------------------------//
 
 
-		glBindVertexArray(VAO);//程序只用到一个数组，所以每次都会取同一个，如果要多个，可以切换绑定的数组,这里按规范也添加上
+		//glBindVertexArray(VAO);//程序只用到一个数组，所以每次都会取同一个，如果要多个，可以切换绑定的数组,这里按规范也添加上
 
-		//glDrawArrays(GL_TRIANGLES,0,3);
-		glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);//使用索引绘制
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glDrawArrays(GL_TRIANGLES,0,3);//0:顶点数组开始角标，3:size
+		//glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);//使用索引绘制
 
 
 		//float timeValue = glfwGetTime();

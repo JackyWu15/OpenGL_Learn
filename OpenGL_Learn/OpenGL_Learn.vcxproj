@@ -133,8 +133,10 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="coordinate.vs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
+    <None Include="coordinate.fs" />
     <None Include="transform.vs" />
   </ItemGroup>
   <ItemGroup>

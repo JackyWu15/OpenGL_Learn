@@ -8,7 +8,7 @@ out vec2 textureColor;
 
 void main()
 {
-   gl_Position = vec4(aPos, 1.0);
+   gl_Position = vec4(aPos, 1.0);//1.0:w∑÷¡ø£¨
    vertexColor = aColor;
    textureColor = vec2(aTexture.x,aTexture.y);
 }
