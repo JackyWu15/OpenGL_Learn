@@ -10,7 +10,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-
+#include "Camera.h"
 using namespace std;
 
 
@@ -79,6 +79,8 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);//相机位置
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f,-1.0f);//原点位置
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);//向上的向量
 
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
@@ -87,15 +89,19 @@ void processInput(GLFWwindow *window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	float cameraSpeed = 2.5 * deltaTime;
+	//float cameraSpeed = 2.5 * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)//向前
-		cameraPos += cameraSpeed * cameraFront;
+	camera.ProcessKeyboard(FORWARD, deltaTime);
+		//cameraPos += cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)//向后
-		cameraPos -= cameraSpeed * cameraFront;
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
+		//cameraPos -= cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)//向左
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		camera.ProcessKeyboard(LEFT, deltaTime);
+		//cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)//向右
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+		//cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
 
 bool firstMouse = true;
@@ -118,7 +124,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
-	float sensitivity = 0.1f; 
+	/*float sensitivity = 0.1f; 
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
@@ -134,18 +140,20 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	front.y = sin(glm::radians(pitch));
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	cameraFront = glm::normalize(front);
+	cameraFront = glm::normalize(front);*/
+	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 
 //鼠标滚动
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-	if (fov >= 1.0f && fov <= 45.0f)
+	/*if (fov >= 1.0f && fov <= 45.0f)
 		fov -= yoffset;
 	if (fov <= 1.0f)
 		fov = 1.0f;
 	if (fov >= 45.0f)
-		fov = 45.0f;
+		fov = 45.0f;*/
+	camera.ProcessMouseScroll(yoffset);
 }
 
 int main(int argc,char *argv[]){
@@ -511,6 +519,8 @@ int main(int argc,char *argv[]){
 		//float camX = sin(glfwGetTime())*radius;
 		//float camZ = cos(glfwGetTime())*radius;
 		//cout << camX<<">>>>>>>>>>>"<<camZ << endl;
+
+		//参1:相机位置，参2：物体原点，参3：向上向量
 		//view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		//ourShader.setMat4("view", view);
@@ -522,13 +532,15 @@ int main(int argc,char *argv[]){
 		//----------------------------------------WSAD和鼠标移动相机-------------------------------------------------------//
 
 		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		ourShader.setMat4("projection", projection);
 
+		
+
 		glm::mat4 view = glm::mat4(1.0f);
-
-		view = glm::lookAt(cameraPos, cameraPos+cameraFront, cameraUp);
-
+		//view = glm::lookAt(cameraPos, cameraPos+cameraFront, cameraUp);//相机
+		view = camera.GetViewMatrix();
 		ourShader.setMat4("view", view);
 
 		//----------------------------------------移动相机-------------------------------------------------------//
