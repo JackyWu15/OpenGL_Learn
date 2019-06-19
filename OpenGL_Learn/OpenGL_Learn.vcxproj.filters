@@ -16,16 +16,22 @@
     <Filter Include="资源文件\texture">
       <UniqueIdentifier>{cedb4924-15f9-42a7-ac83-97289d1ed415}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\src">
+      <UniqueIdentifier>{61086c40-5f65-4307-9751-430af92a07b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\shader">
+      <UniqueIdentifier>{50978065-82de-4e20-aa06-5838c8f6b4cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
-      <Filter>源文件</Filter>
+      <Filter>源文件\src</Filter>
     </ClCompile>
     <ClCompile Include="opengl.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\src</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -43,20 +49,38 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.vs">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="shader.fs">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="transform.vs">
-      <Filter>源文件</Filter>
+    <None Include="coordinate.fs">
+      <Filter>源文件\shader</Filter>
     </None>
     <None Include="coordinate.vs">
-      <Filter>源文件</Filter>
+      <Filter>源文件\shader</Filter>
     </None>
-    <None Include="coordinate.fs">
-      <Filter>源文件</Filter>
+    <None Include="shader.fs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="shader.vs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="transform.vs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="color.vs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="color.fs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="lamp.fs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="diffuse.fs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="diffuse.vs">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="specular.fs">
+      <Filter>源文件\shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
